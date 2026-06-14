@@ -326,7 +326,7 @@ export default function App() {
   };
 
   // Step access rules
-  const canProceedStep0 = provider === "google" || apiKey.trim().length > 6;
+  const canProceedStep0 = provider === "google" || provider === "groq" || apiKey.trim().length > 6;
   const canProceedStep1 = aiPrompt.trim().length > 0;
   const canProceedStep2 = generatedCode.trim().length > 0;
 
@@ -546,11 +546,11 @@ export default function App() {
                           {isSelected && <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />}
                         </div>
                         <p className="text-[11px] text-slate-500 mt-1 lines-clamp-1">
-                          {pKey === "google" ? "Server or Client Grounded" : "Direct model evaluation interface"}
+                          {pKey === "google" || pKey === "groq" ? "Server or Client Grounded" : "Direct model evaluation interface"}
                         </p>
                       </div>
                       <span className="text-[10px] font-mono text-[#a1beeb]/50 mt-4 bg-[#030914] px-2 py-1 rounded inline-block self-start border border-slate-900">
-                        {pKey === "google" ? "Gemini Models" : pKey === "openai" ? "GPT Engine" : "Claude Engine"}
+                        {pKey === "google" ? "Gemini Models" : pKey === "openai" ? "GPT Engine" : pKey === "anthropic" ? "Claude Engine" : "LLaMA/Mixtral"}
                       </span>
                     </button>
                   );
@@ -564,7 +564,7 @@ export default function App() {
                 <label className="text-xs font-mono uppercase tracking-widest text-slate-500 font-bold block">
                   Provider API Token / Authorization
                 </label>
-                {provider === "google" && (
+                {(provider === "google" || provider === "groq") && (
                   <span className="text-[10px] text-emerald-400 bg-emerald-950/20 border border-emerald-900/50 px-2 py-0.5 rounded font-mono">
                     💡 Optional / Server Pre-configured
                   </span>
@@ -589,9 +589,9 @@ export default function App() {
                   {showKey ? <EyeOff className="h-3.5 w-3.5 inline" /> : <Eye className="h-3.5 w-3.5 inline" />}
                 </button>
               </div>
-              {provider === "google" && !apiKey ? (
+              {(provider === "google" || provider === "groq") && !apiKey ? (
                 <p className="text-[11px] text-slate-500 font-mono leading-relaxed">
-                  Notice: Your application sandbox is hosted with persistent environment bindings. Leaving this blank routes your Gemini request through the workspace key automatically.
+                  Notice: Your application sandbox is hosted with persistent environment bindings. Leaving this blank routes your request through the workspace pre-configured key automatically (if available).
                 </p>
               ) : (
                 <p className="text-[11px] text-slate-500 font-mono">

@@ -34,6 +34,18 @@ export const PROVIDER_CONFIGS: Record<string, ProviderConfig> = {
       { id: "gemini-2-5-flash", label: "Gemini 2.5 Flash", apiModelId: "gemini-3.5-flash" },
       { id: "custom", label: "Custom Model ID...", apiModelId: "custom" }
     ]
+  },
+  groq: {
+    id: "groq",
+    label: "Groq (LLaMA/Mixtral)",
+    placeholder: "gsk_...",
+    defaultModelId: "llama-3.3-70b",
+    models: [
+      { id: "llama-3.3-70b", label: "LLaMA 3.3 70B", apiModelId: "llama-3.3-70b-versatile" },
+      { id: "llama-3.1-8b", label: "LLaMA 3.1 8B", apiModelId: "llama-3.1-8b-instant" },
+      { id: "mixtral-8x7b", label: "Mixtral 8x7B", apiModelId: "mixtral-8x7b-32768" },
+      { id: "custom", label: "Custom Model ID...", apiModelId: "custom" }
+    ]
   }
 };
 

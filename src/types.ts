@@ -30,4 +30,4 @@ export interface ProviderConfig {
   defaultModelId: string;
 }
 
-export type AIProviderId = "anthropic" | "openai" | "google";
+export type AIProviderId = "anthropic" | "openai" | "google" | "groq";

@@ -108,11 +108,13 @@ async function startServer() {
     let selectedApiKey = apiKey ? apiKey.trim() : "";
     if (!selectedApiKey && provider === "google") {
       selectedApiKey = process.env.GEMINI_API_KEY || "";
+    } else if (!selectedApiKey && provider === "groq") {
+      selectedApiKey = process.env.GROQ_API_KEY || "";
     }
 
     if (!selectedApiKey) {
       return res.status(400).json({
-        error: `Please provide an API Key for ${provider}. For Google Gemini, you can also set it up in Settings > Secrets.`,
+        error: `Please provide an API Key for ${provider}. For Google Gemini or Groq, you can also set it up in Settings > Secrets.`,
       });
     }
 
@@ -197,6 +199,32 @@ async function startServer() {
 
         const data: any = await response.json();
         rawResponseText = data.content?.map((b: any) => b.text || "").join("") || "";
+      } else if (provider === "groq") {
+        // Groq Chat Completions endpoint
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${selectedApiKey}`,
+          },
+          body: JSON.stringify({
+            model: model || "llama-3.3-70b-versatile",
+            temperature: 0.1,
+            response_format: { type: "json_object" },
+            messages: [
+              { role: "system", content: TCRA_SYSTEM_PROMPT },
+              { role: "user", content: userMessageContent },
+            ],
+          }),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData?.error?.message || `Groq returned HTTP ${response.status}`);
+        }
+
+        const data: any = await response.json();
+        rawResponseText = data.choices?.[0]?.message?.content || "";
       } else {
         throw new Error("Unsupported or unrecognized AI provider: " + provider);
       }
