@@ -1,0 +1,8 @@
+{
+  "name": "Remix: TCRA Code Auditor",
+  "description": "An AI-powered auditing application utilizing the academic TCRA framework (Transparency, Controllability, Reliability, Auditability) to evaluate raw AI-generated code.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
